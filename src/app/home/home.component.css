@@ -1,0 +1,7 @@
+md-card, md-card:hover {
+  box-shadow: none;
+}
+
+md-card-title-group {
+  margin: 0px;
+}

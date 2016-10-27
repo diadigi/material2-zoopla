@@ -1,0 +1,116 @@
+<md-toolbar color="primary">Zoopla Search</md-toolbar>
+
+<md-grid-list cols="3" rowHeight="200">
+  <md-grid-tile>
+    <md-card>
+      <md-card-title>Listings</md-card-title>
+      <md-card-content>
+        <form (submit)="searchListings($event, postcode1.value)">
+          <table style="width: 100%" cellspacing="0">
+            <tr>
+              <td><md-input placeholder="Postcode" style="width: 100%" id="postcode1" #postcode1 required></md-input></td>
+            </tr>
+            <tr>
+              <td>
+                <button md-raised-button color="primary">Get Listings</button>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </md-card-content>
+    </md-card>
+  </md-grid-tile>
+  <md-grid-tile>
+    <md-card>
+      <md-card-title>Average Sold Prices</md-card-title>
+      <md-card-content>
+        <form (submit)="searchAvgSoldPrices($event, postcode2.value)">
+          <table style="width: 100%" cellspacing="0">
+            <tr>
+              <td><md-input placeholder="Postcode" style="width: 100%" id="postcode2" #postcode2 required></md-input></td>
+            </tr>
+            <tr>
+              <td>
+                <button md-raised-button color="primary">Get Average Sold Prices</button>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </md-card-content>
+    </md-card>
+  </md-grid-tile>
+  <md-grid-tile>
+    <md-card>
+      <md-card-title>Richlist</md-card-title>
+      <md-card-content>
+        <form (submit)="searchRichlist($event, postcode3.value)">
+          <table style="width: 100%" cellspacing="0">
+            <tr>
+              <td><md-input placeholder="Postcode" style="width: 100%" id="postcode3" #postcode3 required></md-input></td>
+            </tr>
+            <tr>
+              <td>
+                <button md-raised-button color="primary">Get Richlist</button>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </md-card-content>
+    </md-card>
+  </md-grid-tile>
+</md-grid-list>
+<md-grid-list cols="1" rowHeight="20" *ngIf="listings.listing">
+  <md-grid-tile rowspan="2">
+    <h2>Found Listings</h2>
+  </md-grid-tile>
+  <md-grid-tile *ngFor="let listing of listings.listing;" rowspan="10">
+    <md-card style="width: 100%">
+      <md-card-title-group>
+        <img md-card-sm-image src="{{listing.thumbnail_url}}" alt="{{listing.displayable_address}} thumbnail">
+        <md-card-title>{{listing.displayable_address}}</md-card-title>
+        <md-card-subtitle>{{listing.price | currency:'GBP':true:'4.0'}}</md-card-subtitle>
+      </md-card-title-group>
+      <md-card-content>
+        <p>{{listing.property_type}} - Bathrooms: {{listing.num_bathrooms}}, Bedrooms: {{listing.num_bedrooms}}, Floors: {{listing.num_floors}}, Receptions: {{listing.num_recepts}}</p>
+        <a href="{{listing.details_url}}" target="_blank">View on Zoopla</a>
+      </md-card-content>
+    </md-card>
+  </md-grid-tile>
+</md-grid-list>
+<md-grid-list cols="2" rowHeight="20" *ngIf="soldPrices.areas">
+  <md-grid-tile rowspan="2" colspan="2">
+    <h2>Found Sold Prices</h2>
+  </md-grid-tile>
+  <md-grid-tile *ngFor="let sold of soldPrices.areas;" rowspan="11">
+    <md-card style="width: 100%">
+      <md-card-title-group>
+        <md-card-title>{{sold.prices_url | postcodeFromLink | uppercase }}</md-card-title>
+        <md-card-subtitle>Turnover: {{sold.turnover}}</md-card-subtitle>
+      </md-card-title-group>
+      <md-card-content>
+        <h4>Average Sold Prices</h4>
+        <ul>
+         <li><strong>This Year: </strong>{{sold.average_sold_price_1year | currency:'GBP':true:'4.0'}} (Properties sold: {{sold.number_of_sales_1year}})</li>
+         <li><strong>Last Year: </strong>{{sold.average_sold_price_3year | currency:'GBP':true:'4.0'}} (Properties sold: {{sold.number_of_sales_3year}})</li>
+         <li><strong>2 Years Ago: </strong>{{sold.average_sold_price_5year | currency:'GBP':true:'4.0'}} (Properties sold: {{sold.number_of_sales_5year}})</li>
+         <li><strong>3 Years Ago: </strong>{{sold.average_sold_price_7year | currency:'GBP':true:'4.0'}} (Properties sold: {{sold.number_of_sales_7year}})</li>
+       </ul>
+      </md-card-content>
+    </md-card>
+  </md-grid-tile>
+</md-grid-list>
+<md-grid-list cols="4" rowHeight="20" *ngIf="richlist.highest">
+  <md-grid-tile rowspan="3" colspan="4">
+    <h2>Most Expensive Postcodes</h2>
+  </md-grid-tile>
+  <md-grid-tile *ngFor="let listing of richlist.highest;" rowspan="4">
+    <md-card style="width: 100%">
+      <md-card-title-group>
+        <md-card-title>{{listing.name}}</md-card-title>
+        <md-card-subtitle><a href="{{listing.details_url}}" target="_blank">View on Zoopla</a></md-card-subtitle>
+      </md-card-title-group>
+      <md-card-content>
+      </md-card-content>
+    </md-card>
+  </md-grid-tile>
+</md-grid-list>
